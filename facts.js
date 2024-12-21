@@ -1,5 +1,7 @@
+// Event listener for fetching a fact based on user input
 document.getElementById('getFactButton').addEventListener('click', function () {
-    const number = document.getElementById('number').value;
+    const numberInput = document.getElementById('number');
+    const number = numberInput.value.trim();
 
     if (number === '' || isNaN(number)) {
         alert('Please enter a valid number');
@@ -7,9 +9,14 @@ document.getElementById('getFactButton').addEventListener('click', function () {
     }
 
     fetch(`http://numbersapi.com/${number}?json`)
-        .then(response => response.json()) 
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
-            document.getElementById('fact').innerText = data.text;
+            document.getElementById('fact').innerText = data.text || 'No fact found for this number.';
         })
         .catch(error => {
             console.error('Error fetching the fact:', error);
@@ -17,24 +24,33 @@ document.getElementById('getFactButton').addEventListener('click', function () {
         });
 });
 
-
+// Event listener for fetching a random fact
 document.getElementById('randomFactButton').addEventListener('click', function () {
     fetch('http://numbersapi.com/random?json')
-        .then(response => response.json())  
-        .then(data => {
-            document.getElementById('fact').innerText = data.text;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
-        .catch(error => {   
+        .then(data => {
+            document.getElementById('fact').innerText = data.text || 'No fact found.';
+        })
+        .catch(error => {
             console.error('Error fetching the random fact:', error);
             alert('Sorry, there was an error fetching the random fact.');
         });
 });
 
-
+// Register service worker if supported
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-     navigator.serviceWorker.register('../sw.js').then( () => {
-      console.log('Service Worker Registered')
-     })
-   })
-  }
+        navigator.serviceWorker.register('./sw.js')
+            .then(() => {
+                console.log('Service Worker Registered');
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+    });
+}
