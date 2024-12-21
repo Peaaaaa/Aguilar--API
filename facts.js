@@ -1,4 +1,3 @@
-// Event listener for fetching a fact based on user input
 document.getElementById('getFactButton').addEventListener('click', function () {
     const numberInput = document.getElementById('number');
     const number = numberInput.value.trim();
@@ -24,7 +23,7 @@ document.getElementById('getFactButton').addEventListener('click', function () {
         });
 });
 
-// Event listener for fetching a random fact
+
 document.getElementById('randomFactButton').addEventListener('click', function () {
     fetch('http://numbersapi.com/random?json')
         .then(response => {
@@ -42,7 +41,7 @@ document.getElementById('randomFactButton').addEventListener('click', function (
         });
 });
 
-// Register service worker if supported
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
