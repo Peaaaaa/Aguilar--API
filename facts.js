@@ -7,7 +7,7 @@ document.getElementById('getFactButton').addEventListener('click', function () {
         return;
     }
 
-    fetch(`http://numbersapi.com/${number}?json`)
+    fetch(`http://numbersapi.com/random?json`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
